@@ -2,7 +2,6 @@
 # Typecho 终极一键安装脚本
 # 支持：Armbian/Ubuntu + Nginx + PHP 8.3 + MySQL/SQLite
 # 功能：纯净安装 | 彻底卸载 | 故障修复
-# 最后更新：2024年6月
 
 # 颜色定义
 RED='\033[31m'
