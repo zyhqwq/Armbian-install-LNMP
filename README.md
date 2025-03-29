@@ -7,7 +7,7 @@
 
 ### 一键使用
 ```
-bash <(curl -sSL https://web.zyhmifan.top/LNMP.sh)
+bash <(curl -sSL https://zyhmifan.top/Armbian-install-LNMP/LNMP.sh)
 ```
 
 
