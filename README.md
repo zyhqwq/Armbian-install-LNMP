@@ -18,7 +18,7 @@ sudo apt update && sudo apt install git -y
 ```
 ##### 克隆仓库
 ```
-git clone https://gitee.com/yalishidoordea/install-typecho-on-armbian.git
+git clone https://github.com/zyhqwq/Armbian-install-LNMP.git
 ```
 ##### 进入仓库目录
 ```
