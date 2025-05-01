@@ -293,10 +293,17 @@ EOF
 install_dependencies() {
     echo -e "${YELLOW}[0/6] 安装系统依赖...${RESET}"
     
+    # 确保安装gnupg2
+    if ! command -v gpg &>/dev/null; then
+        apt install -y gnupg2
+    fi
+    
     # 添加Sury PHP仓库
-    if ! grep -q "packages.sury.org" /etc/apt/sources.list.d/*; then
+    if ! grep -q "packages.sury.org" /etc/apt/sources.list.d/* 2>/dev/null; then
         echo -e "${BLUE}添加Sury PHP仓库...${RESET}"
         apt install -y apt-transport-https lsb-release ca-certificates curl
+        
+        # 添加GPG密钥
         curl -sSL https://packages.sury.org/php/apt.gpg | gpg --dearmor -o /usr/share/keyrings/sury-php-archive-keyring.gpg
         echo "deb [signed-by=/usr/share/keyrings/sury-php-archive-keyring.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/sury-php.list
     fi
@@ -314,10 +321,8 @@ install_dependencies() {
         php${PHP_VERSION}-gd \
         php${PHP_VERSION}-zip \
         php${PHP_VERSION}-opcache \
-        php${PHP_VERSION}-intl \
         unzip \
-        wget \
-        curl
+        wget
 }
 
 # 安全加固
