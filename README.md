@@ -7,12 +7,12 @@
 
 ### 一键使用
 ```
-bash <(curl -sSL https://zyhmifan.top/Armbian-install-LNMP/in.sh)
+bash <(curl -sSL https://zyhqwq.github.io/Armbian-install-LNMP/in.sh)
 ```
 
 ### 一键卸载
 ```
-bash <(curl -sSL https://zyhmifan.top/Armbian-install-LNMP/un.sh)
+bash <(curl -sSL https://zyhqwq.github.io/Armbian-install-LNMP/un.sh)
 ```
 
 #### 安装教程
