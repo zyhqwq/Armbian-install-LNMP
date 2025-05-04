@@ -1,6 +1,6 @@
 # Armbian-install-LNMP
 #### 介绍
-**脚本可在armbian内网服务器使用，数据库可选SQlite，MySQL**
+**脚本可在debian12内网服务器使用，数据库MariaDB**
 
 #### 软件架构
 理论上只要是Linux都可尝试使用
