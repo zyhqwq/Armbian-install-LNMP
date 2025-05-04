@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Debian 12 安装 Typecho 一键脚本（MariaDB修复版）
-
 # 检查root权限
 if [ "$(id -u)" -ne 0 ]; then
     echo "请使用root用户运行此脚本！"
@@ -80,18 +78,38 @@ echo "正在安装PHP 8.3..."
 curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg
 echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
 apt update
-apt install -y php8.3-fpm php8.3-cli php8.3-mysql php8.3-curl php8.3-mbstring php8.3-xml php8.3-gd
+apt install -y php8.3-fpm php8.3-cli php8.3-mysql php8.3-curl php8.3-mbstring php8.3-xml php8.3-gd libargon2-1
 
 # 配置PHP-FPM
 sed -i 's/^listen = .*/listen = 127.0.0.1:9000/' /etc/php/8.3/fpm/pool.d/www.conf
 systemctl restart php8.3-fpm
 
+
 # 安装Typecho
 echo "正在安装Typecho..."
-wget --no-check-certificate https://github.zyhmifan.top/github.com/typecho/typecho/releases/download/v1.2.1/typecho.zip -O typecho.zip || {
-    echo "下载Typecho失败，请检查网络连接"
+declare -a download_urls=(
+    "https://github.com/typecho/typecho/releases/latest/download/typecho.zip"        # 官方源
+    "https://gitproxy.click/https://github.com/typecho/typecho/releases/latest/download/typecho.zip"  # GitHub镜像加速
+    "https://github.zyhmifan.top/https://github.com/typecho/typecho/releases/latest/download/typecho.zip"       # 第三方镜像
+)
+
+download_success=0
+for url in "${download_urls[@]}"; do
+    echo "尝试从 ${url} 下载..."
+    wget --no-check-certificate -T 15 -O typecho.zip "${url}" && {
+        download_success=1
+        break
+    } || {
+        echo "下载失败，尝试下一个源..."
+        sleep 1
+    }
+done
+
+if [ "$download_success" -eq 0 ]; then
+    echo "所有下载源均失败，请检查网络或手动下载！"
     exit 1
-}
+fi
+
 mkdir -p ${INSTALL_DIR}
 unzip -o typecho.zip -d ${INSTALL_DIR} || {
     echo "解压Typecho失败，请检查zip文件是否完整"
@@ -249,9 +267,9 @@ rm -f ${TEST_FILE}
 echo "=============================================="
 echo "✅ Typecho 安装完成！"
 if [[ "$ssl_choice" =~ ^[Yy]$ ]]; then
-    echo "访问地址: https://${domain_name}"
+    echo "访问地址: https://${domain_name}/install.php"
 else
-    echo "访问地址: http://${domain_name}"
+    echo "访问地址: http://${domain_name}/install.php"
 fi
 echo "MariaDB root密码: ${DB_ROOT_PASS}"
 echo "Typecho数据库信息:"
